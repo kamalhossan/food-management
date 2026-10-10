@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Barcode from "react-barcode";
-import Form from "./components/form";
+import Form from "./components/Form";
 import Modal from "./components/Modal";
 import { supabase } from "./utils/supabase";
 
