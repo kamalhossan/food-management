@@ -39,7 +39,7 @@ export default function App() {
     }
 
     // বারকোডের জন্য একটি ইউনিক স্ট্রিং তৈরি করছি (যেমন: Name-ID-Age)
-    const uniqueString = `ID:${formData.serial_no}_Name:${formData.name}_Age:${formData.age}`;
+    const uniqueString = `Serial:${formData.serial_no}_Name:${formData.name}_Company:${formData.company}`;
 
     const newUser = {
       //   id: formData.id,
@@ -76,7 +76,7 @@ export default function App() {
 
   const handleModal = () => setModal((isOpen) => !isOpen);
 
-  console.log(workers);
+  // console.log(workers);
 
   const handleView = (barcode) => {
     setModalBarcode(barcode);
