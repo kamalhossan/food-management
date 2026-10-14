@@ -141,6 +141,20 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Worker Nid <span className="text-rose-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="nid"
+              value={formData.nid}
+              onChange={handleChange}
+              required
+              className="w-full px-3.5 py-2.5 text-sm font-mono bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-800"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
               Company / Department
             </label>
             <input

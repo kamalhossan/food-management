@@ -15,7 +15,7 @@ export default function Modal({ handleModal, worker, onToast }) {
 
   const barcodeValue =
     worker.barcode ||
-    `Serial:${worker.serial_no || ""}_Name:${worker.name || ""}_Company:${worker.company || ""}`;
+    `Serial:${worker.serial_no || ""}_Name:${worker.name || ""}_Nid:${worker.nid || "N/A"}_Company:${worker.company || ""}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(barcodeValue);
