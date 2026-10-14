@@ -1,5 +1,5 @@
 import React from "react";
-import Barcode from "react-barcode";
+import QRCode from "react-qr-code";
 
 export default function Form({
   formData,
@@ -13,8 +13,9 @@ export default function Form({
   const serialStr = String(formData.serial_no ?? "").trim();
   const nameStr = String(formData.name ?? "").trim();
   const companyStr = String(formData.company ?? "").trim();
+  const nidStr = String(formData.nid ?? "").trim();
   const previewBarcodeString = serialStr
-    ? `Serial:${serialStr}_Name:${nameStr || "Worker"}_Company:${companyStr || "General"}`
+    ? `Serial:${serialStr}_Name:${nameStr || "Worker"}_Company:${companyStr || "General"}_NID:${nidStr}`
     : "";
 
   return (
@@ -24,9 +25,8 @@ export default function Form({
         <div>
           <div className="flex items-center gap-2">
             <span
-              className={`w-2.5 h-2.5 rounded-full ${
-                isEditing ? "bg-amber-500 animate-pulse" : "bg-emerald-500"
-              }`}
+              className={`w-2.5 h-2.5 rounded-full ${isEditing ? "bg-amber-500 animate-pulse" : "bg-emerald-500"
+                }`}
             />
             <h2 className="text-xl font-bold text-slate-900 tracking-tight">
               {isEditing ? "Edit Worker Details" : "Register Worker"}
@@ -114,6 +114,40 @@ export default function Form({
             Used as the primary key for the barcode identification.
           </span>
         </div>
+        {/* Nid No Field */}
+        <div>
+          <label
+            htmlFor="worker-nid"
+            className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
+          >
+            Worker Nid <span className="text-rose-500">*</span>
+          </label>
+          <div className="relative rounded-xl shadow-xs">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                />
+              </svg>
+            </div>
+            <input
+              id="worker-nid"
+              type="text"
+              name="nid"
+              value={formData.nid}
+              onChange={handleChange}
+              placeholder="e.g. 1234567890"
+              required
+              className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all text-slate-800 placeholder-slate-400 font-mono"
+            />
+          </div>
+          <span className="text-[11px] text-slate-400 mt-1 block">
+            NID number must be unique.
+          </span>
+        </div>
 
         {/* Company Field */}
         <div>
@@ -163,12 +197,13 @@ export default function Form({
             </div>
             <div className="bg-white p-2.5 rounded-lg border border-slate-200 inline-block max-w-full overflow-hidden shadow-2xs">
               <div className="[&_svg]:max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
-                <Barcode
+                <QRCode
                   value={previewBarcodeString}
-                  width={1.2}
-                  height={50}
-                  fontSize={11}
-                  margin={4}
+                  size={200}
+                  level={"H"}
+                  fgColor={"#0f172a"}
+                  bgColor={"#ffffff"}
+                  renderAs="svg"
                 />
               </div>
             </div>
@@ -180,11 +215,10 @@ export default function Form({
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed ${
-              isEditing
-                ? "bg-amber-600 hover:bg-amber-700 focus:ring-amber-500 shadow-amber-600/20 hover:shadow-md"
-                : "bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 shadow-sky-600/20 hover:shadow-md"
-            }`}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed ${isEditing
+              ? "bg-amber-600 hover:bg-amber-700 focus:ring-amber-500 shadow-amber-600/20 hover:shadow-md"
+              : "bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 shadow-sky-600/20 hover:shadow-md"
+              }`}
           >
             {isSubmitting ? (
               <>

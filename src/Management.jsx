@@ -18,6 +18,7 @@ export default function Management() {
     name: "",
     serial_no: "",
     company: "",
+    nid: ""
   });
   const [editingWorker, setEditingWorker] = useState(null);
 
@@ -89,6 +90,7 @@ export default function Management() {
       name: "",
       serial_no: "",
       company: "",
+      nid: "",
     });
     setEditingWorker(null);
   };
@@ -105,13 +107,14 @@ export default function Management() {
     const nameStr = String(formData.name ?? "").trim();
     const serialStr = String(formData.serial_no ?? "").trim();
     const companyStr = String(formData.company ?? "").trim();
+    const nidStr = String(formData.nid ?? "").trim();
 
     if (!serialStr) {
       showToast("Please provide a Serial Number / Worker ID", "error");
       return;
     }
 
-    const uniqueBarcode = `Serial:${serialStr}_Name:${nameStr || "Worker"}_Company:${companyStr || "General"}`;
+    const uniqueBarcode = `Serial:${serialStr}_Name:${nameStr || "Worker"}_Nid:${nidStr || "N/A"}_Company:${companyStr || "General"}`;
 
     setIsSubmitting(true);
 
@@ -123,6 +126,7 @@ export default function Management() {
           serial_no: serialStr,
           company: companyStr,
           barcode: uniqueBarcode,
+          nid: nidStr,
         };
 
         const { data, error } = await supabase
@@ -151,6 +155,7 @@ export default function Management() {
           serial_no: serialStr,
           company: companyStr,
           barcode: uniqueBarcode,
+          nid: nidStr,
         };
 
         const { data, error } = await supabase
@@ -183,13 +188,15 @@ export default function Management() {
     const nameStr = String(updatedWorker.name ?? "").trim();
     const serialStr = String(updatedWorker.serial_no ?? "").trim();
     const companyStr = String(updatedWorker.company ?? "").trim();
+    const nidStr = String(updatedWorker.nid ?? "").trim();
 
-    const uniqueBarcode = `Serial:${serialStr}_Name:${nameStr || "Worker"}_Company:${companyStr || "General"}`;
+    const uniqueBarcode = `Serial:${serialStr}_Name:${nameStr || "Worker"}_Nid:${nidStr || "N/A"}_Company:${companyStr || "General"}`;
     const payload = {
       name: nameStr,
       serial_no: serialStr,
       company: companyStr,
       barcode: uniqueBarcode,
+      nid: nidStr,
     };
 
     const { data, error } = await supabase
@@ -235,91 +242,92 @@ export default function Management() {
     }
   };
 
-// When clicking Edit in WorkerList:
-// We populate the left form for immediate in-page editing AND support modal
-const handleEdit = (worker) => {
-  setEditingWorker(worker);
-  setFormData({
-    id: worker.id,
-    name: worker.name != null ? String(worker.name) : "",
-    serial_no: worker.serial_no != null ? String(worker.serial_no) : "",
-    company: worker.company != null ? String(worker.company) : "",
-  });
+  // When clicking Edit in WorkerList:
+  // We populate the left form for immediate in-page editing AND support modal
+  const handleEdit = (worker) => {
+    setEditingWorker(worker);
+    setFormData({
+      id: worker.id,
+      name: worker.name != null ? String(worker.name) : "",
+      serial_no: worker.serial_no != null ? String(worker.serial_no) : "",
+      company: worker.company != null ? String(worker.company) : "",
+      nid: worker.nid != null ? String(worker.nid) : "",
+    });
 
-  // Also offer quick edit modal option on mobile or if triggered
-  if (window.innerWidth < 1024) {
-    setEditModalWorker(worker);
-  } else {
-    // Scroll smoothly to the form on desktop
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-};
+    // Also offer quick edit modal option on mobile or if triggered
+    if (window.innerWidth < 1024) {
+      setEditModalWorker(worker);
+    } else {
+      // Scroll smoothly to the form on desktop
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
-return (
-  <div className="w-full">
-    {/* Responsive Two-Column Layout: Form on Left, Worker List on Right */}
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-      {/* Left Side: Form */}
-      <div className="lg:col-span-5 xl:col-span-4 w-full">
-        <Form
-          formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          isEditing={!!editingWorker}
-          cancelEdit={cancelEdit}
-          isSubmitting={isSubmitting}
-          resetForm={resetForm}
-        />
+  return (
+    <div className="w-full">
+      {/* Responsive Two-Column Layout: Form on Left, Worker List on Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        {/* Left Side: Form */}
+        <div className="lg:col-span-5 xl:col-span-4 w-full">
+          <Form
+            formData={formData}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isEditing={!!editingWorker}
+            cancelEdit={cancelEdit}
+            isSubmitting={isSubmitting}
+            resetForm={resetForm}
+          />
+        </div>
+
+        {/* Right Side: Worker List */}
+        <div className="lg:col-span-7 xl:col-span-8 w-full">
+          <WorkerList
+            workers={workers}
+            isLoading={isLoading}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedCompany={selectedCompany}
+            setSelectedCompany={setSelectedCompany}
+            onViewBarcode={(worker) => setBarcodeModalWorker(worker)}
+            onEdit={handleEdit}
+            onDelete={(worker) => setDeleteModalWorker(worker)}
+            onRefresh={fetchWorkers}
+          />
+        </div>
       </div>
 
-      {/* Right Side: Worker List */}
-      <div className="lg:col-span-7 xl:col-span-8 w-full">
-        <WorkerList
-          workers={workers}
-          isLoading={isLoading}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedCompany={selectedCompany}
-          setSelectedCompany={setSelectedCompany}
-          onViewBarcode={(worker) => setBarcodeModalWorker(worker)}
-          onEdit={handleEdit}
-          onDelete={(worker) => setDeleteModalWorker(worker)}
-          onRefresh={fetchWorkers}
+      {/* View Barcode Modal with Download Button */}
+      {barcodeModalWorker && (
+        <Modal
+          worker={barcodeModalWorker}
+          handleModal={() => setBarcodeModalWorker(null)}
+          onToast={showToast}
         />
-      </div>
+      )}
+
+      {/* Edit Worker Modal */}
+      {editModalWorker && (
+        <EditModal
+          isOpen={!!editModalWorker}
+          worker={editModalWorker}
+          onClose={() => setEditModalWorker(null)}
+          onSave={handleEditModalSave}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalWorker && (
+        <DeleteModal
+          isOpen={!!deleteModalWorker}
+          worker={deleteModalWorker}
+          onClose={() => setDeleteModalWorker(null)}
+          onConfirmDelete={handleConfirmDelete}
+        />
+      )}
+
+      {/* Global Toast Notification */}
+      <Toast toast={toast} onClose={() => setToast(null)} />
     </div>
-
-    {/* View Barcode Modal with Download Button */}
-    {barcodeModalWorker && (
-      <Modal
-        worker={barcodeModalWorker}
-        handleModal={() => setBarcodeModalWorker(null)}
-        onToast={showToast}
-      />
-    )}
-
-    {/* Edit Worker Modal */}
-    {editModalWorker && (
-      <EditModal
-        isOpen={!!editModalWorker}
-        worker={editModalWorker}
-        onClose={() => setEditModalWorker(null)}
-        onSave={handleEditModalSave}
-      />
-    )}
-
-    {/* Delete Confirmation Modal */}
-    {deleteModalWorker && (
-      <DeleteModal
-        isOpen={!!deleteModalWorker}
-        worker={deleteModalWorker}
-        onClose={() => setDeleteModalWorker(null)}
-        onConfirmDelete={handleConfirmDelete}
-      />
-    )}
-
-    {/* Global Toast Notification */}
-    <Toast toast={toast} onClose={() => setToast(null)} />
-  </div>
-);
+  );
 }

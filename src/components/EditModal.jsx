@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Barcode from "react-barcode";
+import QRCode from "react-qr-code";
 
 export default function EditModal({ isOpen, onClose, worker, onSave }) {
   const [formData, setFormData] = useState({
     name: "",
     serial_no: "",
     company: "",
+    nid: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,6 +34,7 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
     const nameStr = String(formData.name ?? "").trim();
     const serialStr = String(formData.serial_no ?? "").trim();
     const companyStr = String(formData.company ?? "").trim();
+    const nidStr = String(formData.nid ?? "").trim();
 
     if (!serialStr) {
       alert("Please provide a Serial Number / ID");
@@ -45,6 +47,7 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
         name: nameStr,
         serial_no: serialStr,
         company: companyStr,
+        nid: nidStr,
       });
       onClose();
     } catch (err) {
@@ -57,8 +60,9 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
   const serialStr = String(formData.serial_no ?? "").trim();
   const nameStr = String(formData.name ?? "").trim();
   const companyStr = String(formData.company ?? "").trim();
+  const nidStr = String(formData.nid ?? "").trim();
   const previewBarcode = serialStr
-    ? `Serial:${serialStr}_Name:${nameStr || "Worker"}_Company:${companyStr || "General"}`
+    ? `Serial:${serialStr}_Name:${nameStr || "Worker"}_Nid:${nidStr || "N/A"}_Company:${companyStr || "General"}`
     : "";
 
   return (
@@ -155,7 +159,7 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
               </span>
               <div className="bg-white p-2 rounded-lg border border-slate-200 inline-block max-w-full overflow-hidden">
                 <div className="[&_svg]:max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
-                  <Barcode value={previewBarcode} width={1.2} height={45} fontSize={11} margin={4} />
+                  <QRCode value={previewBarcode} size={200} />
                 </div>
               </div>
             </div>

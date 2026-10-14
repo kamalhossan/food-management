@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Barcode from "react-barcode";
+// import Barcode from "react-barcode";
+import QRCode from "react-qr-code";
 import {
   downloadBarcodePNG,
   downloadBarcodeSVG,
@@ -124,14 +125,12 @@ export default function Modal({ handleModal, worker, onToast }) {
             className="p-6 bg-white rounded-2xl border-2 border-dashed border-slate-200 text-center shadow-xs flex flex-col items-center justify-center transition-all hover:border-slate-300"
           >
             <div className="max-w-full overflow-hidden [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
-              <Barcode
+              <QRCode
                 value={barcodeValue}
-                width={1.5}
-                height={75}
-                fontSize={13}
-                margin={8}
-                background="#ffffff"
-                lineColor="#0f172a"
+                size={300}
+                level={"H"}
+                fgColor="#0f172a"
+                bgColor="#ffffff"
               />
             </div>
           </div>

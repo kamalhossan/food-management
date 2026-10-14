@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import Barcode from "react-barcode";
+import QRCode from "react-qr-code";
 
 export default function WorkerList({
   workers = [],
@@ -250,13 +250,20 @@ export default function WorkerList({
                           className="inline-block p-1 bg-white rounded border border-slate-200 hover:border-sky-400 transition-all shadow-2xs cursor-pointer group-hover:scale-105"
                           title="Click to view full barcode"
                         >
-                          <div className="h-6 w-24 overflow-hidden flex items-center justify-center pointer-events-none [&_svg]:max-w-full [&_svg]:h-full">
-                            <Barcode
+                          <div className="h-15 w-15 overflow-hidden flex items-center justify-center pointer-events-none [&_svg]:max-w-full [&_svg]:h-full">
+                            {/* <Barcode
                               value={barcodeStr}
                               width={1}
                               height={24}
                               displayValue={false}
                               margin={0}
+                            /> */}
+                            <QRCode
+                              value={barcodeStr}
+                              size={100}
+                              level={"H"}
+                              fgColor="#0f172a"
+                              bgColor="#ffffff"
                             />
                           </div>
                         </button>
