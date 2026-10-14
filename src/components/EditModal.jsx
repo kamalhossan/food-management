@@ -16,6 +16,7 @@ export default function EditModal({ isOpen, onClose, worker, onSave }) {
         name: worker.name != null ? String(worker.name) : "",
         serial_no: worker.serial_no != null ? String(worker.serial_no) : "",
         company: worker.company != null ? String(worker.company) : "",
+        nid: worker.nid != null ? String(worker.nid) : "",
       });
     }
   }, [worker]);
