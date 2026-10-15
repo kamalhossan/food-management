@@ -28,7 +28,7 @@ export default function Modal({ handleModal, worker, onToast }) {
 
   const handleDownloadPNG = () => {
     setIsDownloading(true);
-    const filename = `${worker.name || "worker"}_${worker.serial_no || "barcode"}`;
+    const filename = `${worker.name || "worker"}_${worker.company || "barcode"}`;
     const success = downloadBarcodePNG("#modal-barcode-container svg", filename);
     if (success && onToast) {
       onToast("Barcode PNG downloaded successfully!", "success");
@@ -37,7 +37,7 @@ export default function Modal({ handleModal, worker, onToast }) {
   };
 
   const handleDownloadSVG = () => {
-    const filename = `${worker.name || "worker"}_${worker.serial_no || "barcode"}`;
+    const filename = `${worker.name || "worker"}_${worker.company || "barcode"}`;
     const success = downloadBarcodeSVG("#modal-barcode-container svg", filename);
     if (success && onToast) {
       onToast("Barcode SVG downloaded successfully!", "success");
