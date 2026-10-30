@@ -56,7 +56,7 @@ export default function Modal({ handleModal, worker, onToast }) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/65 backdrop-blur-xs transition-opacity animate-fade-in"
     >
       <div
-        className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-scale-up"
+        className="relative w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-slate-100 transform transition-all animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Header */}
@@ -122,12 +122,12 @@ export default function Modal({ handleModal, worker, onToast }) {
           {/* Barcode Display Container */}
           <div
             id="modal-barcode-container"
-            className="p-6 bg-white rounded-2xl border-2 border-dashed border-slate-200 text-center shadow-xs flex flex-col items-center justify-center transition-all hover:border-slate-300"
+            className="p-4 bg-white rounded-2xl border-2 border-dashed border-slate-200 text-center shadow-xs flex flex-col items-center justify-center transition-all hover:border-slate-300"
           >
             <div className="max-w-full overflow-hidden [&_svg]:max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
               <QRCode
                 value={barcodeValue}
-                size={300}
+                size={200}
                 level={"H"}
                 fgColor="#0f172a"
                 bgColor="#ffffff"
